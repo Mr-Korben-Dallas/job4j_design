@@ -24,6 +24,4 @@ public class BackwardArrayIt implements Iterator<Integer> {
         var index = data.length - ++point;
         return data[index];
     }
-
-
 }
