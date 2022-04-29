@@ -13,7 +13,6 @@ public class BackwardArrayIt implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        System.out.println(1);
         return point < data.length;
     }
 
