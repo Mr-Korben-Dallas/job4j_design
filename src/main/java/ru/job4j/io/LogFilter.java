@@ -7,7 +7,7 @@ import java.util.List;
 public class LogFilter {
     public List<String> filter(String file) {
         List<String> lines = new ArrayList<>();
-        String matcher = "(.*)+(404)(.*)+(\\d)+";
+        String matcher = "^[^\"]*\"[^\"]*\\sHTTP\\/[\\d.]+\"\\s+(404)(.*)+";
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.lines()
                     .filter(line -> line.matches(matcher))
@@ -25,7 +25,7 @@ public class LogFilter {
                 )
         )) {
             for (String line : log) {
-                out.write(line + System.lineSeparator());
+                out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,7 +35,7 @@ public class LogFilter {
     public static void main(String[] args) {
         LogFilter logFilter = new LogFilter();
         List<String> log = logFilter.filter("log.txt");
-        System.out.println(log);
+        log.forEach(System.out::println);
         save(log, "404.txt");
     }
 }
