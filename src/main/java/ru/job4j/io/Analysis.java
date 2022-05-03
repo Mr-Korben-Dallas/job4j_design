@@ -4,10 +4,18 @@ import java.io.*;
 import java.util.List;
 
 public class Analysis {
-    public void unavailable(String source, String target) {
+    private String source = "";
+    private String target = "";
+
+    public Analysis(String source, String target) {
+        this.source = source;
+        this.target = target;
+    }
+
+    public void unavailable() {
         boolean isServerDown = false;
-        try (BufferedReader reader = new BufferedReader(new FileReader(source));
-             PrintWriter writer = new PrintWriter(new FileOutputStream(target))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.source));
+             PrintWriter writer = new PrintWriter(new FileOutputStream(this.target))) {
             List<String> lineLists = reader.lines().toList();
             for (String line : lineLists) {
                 String[] logText = line.split(" ");
@@ -27,7 +35,7 @@ public class Analysis {
     }
 
     public static void main(String[] args) {
-        Analysis analysis = new Analysis();
-        analysis.unavailable("server.log", "unavailable.csv");
+        Analysis analysis = new Analysis("server.log", "unavailable.csv");
+        analysis.unavailable();
     }
 }
