@@ -30,8 +30,15 @@ public class ConfigTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void whenPairWithBreakInstance() {
+    public void whenPairWithLeftPartOfKey() {
         String path = "./illegalarg.properties";
+        Config config = new Config(path);
+        config.load();
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void whenPairWithRightPartOfKey() {
+        String path = "./illegalargright.properties";
         Config config = new Config(path);
         config.load();
     }

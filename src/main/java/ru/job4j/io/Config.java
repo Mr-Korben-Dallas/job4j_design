@@ -19,9 +19,7 @@ public class Config {
                     .filter(line -> !(line.isBlank() || line.startsWith("#")))
                     .forEach(line -> {
                         int index = line.indexOf("=");
-                        if (line.split("=").length <= 2 && index == 0) {
-                            throw new IllegalArgumentException();
-                        }
+                        checkKeyValuePatternMatching(line, index);
                         values.put(
                                 line.substring(0, index),
                                 line.substring(index + 1)
@@ -49,6 +47,13 @@ public class Config {
             e.printStackTrace();
         }
         return out.toString();
+    }
+
+    private void checkKeyValuePatternMatching(String line, int index) {
+        int valuesLength = line.split("=").length;
+        if (valuesLength <= 2 && index <= 0 || valuesLength < 2) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public static void main(String[] args) {
