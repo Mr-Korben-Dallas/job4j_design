@@ -5,26 +5,26 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
-    private Set<FileProperty> setOfFileProperties = new HashSet<>();
-    private List<Path> listOfFileDuplicates = new ArrayList<>();
+    private Map<String, String> mapOfFileProperties = new LinkedHashMap<>();
+    private Set<String> setOfFileDuplicates = new HashSet<>();
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        FileProperty fileProperty = new FileProperty(attrs.size(), file.getFileName().toString());
-        boolean isAdded = setOfFileProperties.add(fileProperty);
-        if (!isAdded) {
-            listOfFileDuplicates.add(file);
+        String filePath = file.toAbsolutePath().toString();
+        String fileName = file.getFileName().toString();
+        if (mapOfFileProperties.containsKey(fileName)) {
+            setOfFileDuplicates.add(filePath);
+            setOfFileDuplicates.add(mapOfFileProperties.get(fileName));
+        } else {
+            mapOfFileProperties.put(fileName, filePath);
         }
         return super.visitFile(file, attrs);
     }
 
-    public List<Path> getListOfFileDuplicates() {
-        return this.listOfFileDuplicates;
+    public Set<String> getListOfFileDuplicates() {
+        return setOfFileDuplicates;
     }
 }
