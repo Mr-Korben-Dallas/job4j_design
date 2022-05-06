@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Search {
+    private static Path filePath;
+    private static String fileExtension;
+
     public static void main(String[] args) throws IOException {
         Search.validateInput(args);
-        Path start = Paths.get(args[0]);
-        search(start, p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
+        search(filePath, p -> p.toFile().getName().endsWith(fileExtension)).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
@@ -20,9 +22,18 @@ public class Search {
         return searcher.getPaths();
     }
 
-    private static void validateInput(String[] args) {
-        if (args.length == 0 || args.length > 2) {
+    private static void validateInput(String[] args) throws IOException {
+        if (args.length != 2) {
             throw new IllegalArgumentException("You need enter two arguments, first is path, second is file extension");
+
+        }
+        filePath = Paths.get(args[0]);
+        if (!Files.exists(filePath)) {
+            throw new IOException("Entered path does not exists.");
+        }
+        fileExtension = args[1];
+        if (!fileExtension.startsWith(".")) {
+            throw new IOException("File extension must start with a dot.");
         }
     }
 }
