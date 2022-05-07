@@ -29,14 +29,13 @@ public class ArgsName {
     }
 
     private static void validateInput(String[] args) {
-        if (args.length != 0) {
-            for (String arg : args) {
-                if (!arg.startsWith("-")) {
-                    throw new IllegalArgumentException("You entered the argument name incorrectly.");
-                }
-            }
-        } else {
+        if (args.length == 0) {
             throw new IllegalArgumentException("You need enter at least one argument.");
+        }
+        for (String arg : args) {
+            if (!arg.startsWith("-")) {
+                throw new IllegalArgumentException("You entered the argument name incorrectly.");
+            }
         }
     }
 
