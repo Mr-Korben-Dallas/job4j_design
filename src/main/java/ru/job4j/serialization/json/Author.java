@@ -4,9 +4,13 @@ import java.util.Objects;
 
 public class Author {
     private String name;
+    private int numberOfHands;
+    private boolean isHuman;
 
-    public Author(String name) {
+    public Author(String name, int numberOfHands, boolean isHuman) {
         this.name = name;
+        this.numberOfHands = numberOfHands;
+        this.isHuman = isHuman;
     }
 
     @Override
@@ -18,12 +22,12 @@ public class Author {
             return false;
         }
         Author author = (Author) o;
-        return Objects.equals(name, author.name);
+        return numberOfHands == author.numberOfHands && isHuman == author.isHuman && Objects.equals(name, author.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, numberOfHands, isHuman);
     }
 
     @Override
@@ -32,6 +36,10 @@ public class Author {
                 + "name='"
                 + name
                 + '\''
+                + ", numberOfHands="
+                + numberOfHands
+                + ", isHuman="
+                + isHuman
                 + '}';
     }
 }
