@@ -2,6 +2,7 @@ package ru.job4j.serialization.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.json.JSONObject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -43,5 +44,12 @@ public class Main {
             Author result = (Author) unmarshaller.unmarshal(reader);
             System.out.println(result);
         }
+        JSONObject jsonAuthor = new JSONObject("{\"name\":\"Tony Hawk\", \"numberOfHands\":2, \"isHuman\":true}");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", book.getName());
+        jsonObject.put("country", book.getCountry());
+        jsonObject.put("authors", jsonAuthor);
+        System.out.println(jsonObject);
+        System.out.println(new JSONObject(book));
     }
 }

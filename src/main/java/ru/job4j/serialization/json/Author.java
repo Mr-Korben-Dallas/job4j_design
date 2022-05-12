@@ -25,6 +25,18 @@ public class Author {
         this.isHuman = isHuman;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getNumberOfHands() {
+        return numberOfHands;
+    }
+
+    public boolean isHuman() {
+        return isHuman;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
