@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<books>
+    <book>
+        <name>Some Book</name>
+        <country>USA</country>
+        <authors>
+            <author>
+                <name>John Doe</name>
+                <numberOfHands>2</numberOfHands>
+                <isHuman>true</isHuman>
+            </author>
+            <author>
+                <name>Lisa Doe</name>
+                <numberOfHands>2</numberOfHands>
+                <isHuman>true</isHuman>
+            </author>
+        </authors>
+    </book>
+</books>
