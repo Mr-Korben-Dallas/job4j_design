@@ -1,11 +1,23 @@
 package ru.job4j.serialization.json;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
+@XmlRootElement(name = "author")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Author {
+    @XmlAttribute
     private String name;
+    @XmlAttribute
     private int numberOfHands;
+    @XmlAttribute
     private boolean isHuman;
+
+    public Author() {
+    }
 
     public Author(String name, int numberOfHands, boolean isHuman) {
         this.name = name;
