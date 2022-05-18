@@ -1,7 +1,6 @@
 package ru.job4j.jdbc;
 
-import ru.job4j.io.Config;
-
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 import java.util.StringJoiner;
@@ -52,8 +51,18 @@ public class TableEditor implements AutoCloseable {
         exec(preparedQuery);
     }
 
-    private void initConnection() throws Exception {
-        connection = getConnection();
+    private void initConnection() {
+        try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
+            this.properties.load(in);
+            Class.forName(this.properties.getProperty("jdbc.driver"));
+            connection = DriverManager.getConnection(
+                    this.properties.getProperty("jdbc.url"),
+                    this.properties.getProperty("jdbc.username"),
+                    this.properties.getProperty("jdbc.password")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void exec(String formattedQuery) {
@@ -83,16 +92,6 @@ public class TableEditor implements AutoCloseable {
         return buffer.toString();
     }
 
-    private Connection getConnection() throws Exception {
-        Config config = new Config("./src/main/resources/app.properties");
-        config.load();
-        Class.forName(config.value("jdbc.driver"));
-        String url = config.value("jdbc.url");
-        String login = config.value("jdbc.username");
-        String password = config.value("jdbc.password");
-        return DriverManager.getConnection(url, login, password);
-    }
-
     private String prepareQuery(String query, Object... args) {
         return String.format(query, args);
     }
@@ -101,17 +100,20 @@ public class TableEditor implements AutoCloseable {
         System.out.println(tableEditor.getTableScheme(tableName));
     }
 
-    public static void main(String[] args) throws Exception {
-        TableEditor tableEditor = new TableEditor(new Properties());
-        String tableName = "demo_table";
-        tableEditor.createTable(tableName);
-        showTableState(tableEditor, tableName);
-        tableEditor.addColumn(tableName, "new_column_name", "text");
-        showTableState(tableEditor, tableName);
-        tableEditor.renameColumn(tableName, "new_column_name", "some_other_column_name");
-        showTableState(tableEditor, tableName);
-        tableEditor.dropColumn(tableName, "some_other_column_name");
-        showTableState(tableEditor, tableName);
-        tableEditor.dropTable(tableName);
+    public static void main(String[] args) {
+        try (TableEditor tableEditor = new TableEditor(new Properties())) {
+            String tableName = "demo_table";
+            tableEditor.createTable(tableName);
+            showTableState(tableEditor, tableName);
+            tableEditor.addColumn(tableName, "new_column_name", "text");
+            showTableState(tableEditor, tableName);
+            tableEditor.renameColumn(tableName, "new_column_name", "some_other_column_name");
+            showTableState(tableEditor, tableName);
+            tableEditor.dropColumn(tableName, "some_other_column_name");
+            showTableState(tableEditor, tableName);
+            tableEditor.dropTable(tableName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
