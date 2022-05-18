@@ -52,9 +52,7 @@ public class TableEditor implements AutoCloseable {
     }
 
     private void initConnection() {
-        try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
-            this.properties.load(in);
-            Class.forName(this.properties.getProperty("jdbc.driver"));
+        try {
             connection = DriverManager.getConnection(
                     this.properties.getProperty("jdbc.url"),
                     this.properties.getProperty("jdbc.username"),
@@ -101,7 +99,12 @@ public class TableEditor implements AutoCloseable {
     }
 
     public static void main(String[] args) {
-        try (TableEditor tableEditor = new TableEditor(new Properties())) {
+        try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
+            Properties properties = new Properties();
+            properties.load(in);
+            Class.forName(properties.getProperty("jdbc.driver"));
+            TableEditor tableEditor = new TableEditor(properties);
+
             String tableName = "demo_table";
             tableEditor.createTable(tableName);
             showTableState(tableEditor, tableName);
