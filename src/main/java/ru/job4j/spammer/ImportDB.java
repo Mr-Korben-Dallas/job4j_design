@@ -23,19 +23,17 @@ public class ImportDB {
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
              rd.lines().forEach(ln -> {
                  String[] value = ln.split(";");
-                 if (validateElements(value)) {
-                     users.add(new User(value[0], value[1]));
-                 }
+                 validateElements(value);
+                 users.add(new User(value[0], value[1]));
              });
         }
         return users;
     }
 
-    private boolean validateElements(String[] value) {
-        if (value.length != 2 && value[0].isEmpty() && value[1].isEmpty()) {
-            return false;
+    private void validateElements(String[] value) {
+        if (value.length != 2 || value[0].isEmpty() && value[1].isEmpty()) {
+            throw new IllegalArgumentException();
         }
-        return true;
     }
 
     public void save(List<User> users) throws ClassNotFoundException, SQLException {
